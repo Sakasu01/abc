@@ -22,21 +22,25 @@ using P = pair<string,string>;
 template<class T> inline bool chmin(T& a,T b) {if(a>b){a=b;return 1;} return 0;}
 
 int main(){
-	int n;
-    cin>>n;
+	int n, k;
+    cin>>n>>k;
     vector<int> h(n);
-    rep(i,0,n){
-        cin >> h[i];
-    }
-  
-    vector<int> dp(n);
+    rep(i,0,n) cin >> h[i];
+    vector<int> dp(n, 1e9);
     dp[0] = 0;
     //dp[i]:= i番目までに払うコストの総和の最小値
-    rep(i,1,n){
-        if(i>=2)dp[i]=min(dp[i-1]+abs(h[i-1]-h[i]),dp[i-2]+abs(h[i-2]-h[i]));
-        else dp[i]=dp[i-1]+abs(h[i-1]-h[i]);
-        // cout << dp[i] << endl;
+    rep(i,0,n){
+        if(i-k<=0){
+            rep(j,0,i){
+                dp[i] = min(dp[i], dp[j]+abs(h[i]-h[j]));
+            }
+        } else {
+            rep(j,i-k,i){
+                dp[i] = min(dp[i], dp[j]+abs(h[i]-h[j]));
+            }
+        }
     }
+
     cout << dp[n-1] << endl;
 
     return 0;
